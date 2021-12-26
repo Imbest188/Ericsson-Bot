@@ -12,7 +12,7 @@ from Telnet.ControllerPool import MobileSwitchingCentersPool as MSC
 
 from Telnet.Alex import EricssonBscCommands as Alex
 class Bot:
-    def __init__(self, token="974157142:AAEFeuysmugFEDiWnjHM5mfmdXlu65cc1n0"):
+    def __init__(self, token="**TELEGRAM_TOKEN**"):
         self.updater = Updater(token)
         self.users = Users()
         self.keyboard = Keyboard()
@@ -33,13 +33,13 @@ class Bot:
         threads = []
 
         threads.append(Thread(target=self.__initEricssonObject,
-                              args=(self.pool, '10.140.3.7', 'ts_user', 'apg43l2@', 'BSC04'), daemon=True))
+                              args=(self.pool, '**IP**', '**LOGIN**', '**PWD**', 'BSC04'), daemon=True))
         threads.append(Thread(target=self.__initEricssonObject,
-                              args=(self.pool, '10.140.27.68', 'ts_user', 'apg43l1@', 'BSC05'), daemon=True))
+                              args=(self.pool, '**IP**', '**LOGIN**', '**PWD**', 'BSC05'), daemon=True))
         threads.append(Thread(target=self.__initEricssonObject,
-                              args=(self.mssPool, '10.56.135.16', 'Administrator', 'Admin023', 'MSS02'), daemon=True))
+                              args=(self.mssPool, '**IP**', '**LOGIN**', '**PWD**', 'MSS02'), daemon=True))
         threads.append(Thread(target=self.__initEricssonObject,
-                              args=(self.mssPool, '10.20.202.20', 'Smena', 'Ericsson1@', 'MSC01'), daemon=True))
+                              args=(self.mssPool, '**IP**', '**LOGIN**', '**PWD**', 'MSC01'), daemon=True))
 
         for thread in threads:
             thread.start()
