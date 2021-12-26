@@ -58,8 +58,6 @@ class Bot:
         result = update.callback_query.data
         k = Keyboard()
         b = ButtonsSets()
-        if b.getSet(result):
-            print('+')
         k.createInlineKeyboard(b.getSet(result))
         update.message.reply_text('555', reply_markup=k.createReplyKeyboard())
 
@@ -70,18 +68,17 @@ class Bot:
         self.users.newUser(user.id, username)
 
     def messageHandler(self, update: Update, context: CallbackContext) -> None:
-        if 1:
+        try:
             self.__messageHandler(update)
-        #except:
-        #    self.pool.reconnect()
-        #    self.mssPool.reconnect()
+        except ConnectionException:
+            self.pool.reconnect()
+            self.mssPool.reconnect()
 
     def __messageHandler(self, update: Update) -> None:
         user = update.message.from_user
         if not self.users.checkUser(user.id):
             self.addNewUser(user)
         text = update.message.text
-        print(text)
         result = ''
         if '/start' in text:
             set = self.buttonSets.getSet('Меню')
@@ -417,7 +414,6 @@ class Bot:
             __header = f'{text}:\n'
             result = __header + '\n'.join(self.users.getUsers())
         if text.startswith('/id'):
-            #try:
             uid = int(text.split()[0].replace('/id', ''))
             result = f'Права пользователя {uid}:\n' + '\n'.join(self.users.getUserRights(uid))
 
@@ -438,7 +434,6 @@ class Bot:
                         name = self.users.getUserName(uid)
                         update.message.reply_text(f'Пользователю {name} удален набор {right}')
                         return
-            #self.keyboard.createReplyKeyboard()
         if text.startswith('//'):
             if self.users.userStateChanged(user.id, 'Состояние потока', onlyCheck=True):
                 text = text.replace('//', '')
